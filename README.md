@@ -149,10 +149,10 @@ if ($custom_inspector->countMessages()) {
 }
 ```
 
-To get a specific message you can use the `get()` method and provide it a path to the messages.  The path for a top-level inspector is simply the key name which was passed when calling check.
+To get a specific message you can use the `getMessages()` method and provide it a path to the messages.  The path for a top-level inspector is simply the key name which was passed when calling check.
 
 ```php
-if ($messages = $custom_inspector->get('description')) {
+if ($messages = $custom_inspector->getMessages('description')) {
 	foreach ($messages as $message) {
 		echo '<li>' . $message . '</li>';
 	}
@@ -216,7 +216,7 @@ public function validate($data)
 Child messages will be accessible from the top-level validator using an object notation to recursively reference child inspectors and eventually get the messages for their particular checks:
 
 ```php
-$messages = $registration_inspector->get('person.firstName');
+$messages = $registration_inspector->getMessages('person.firstName');
 ```
 
 ## A Complex Example

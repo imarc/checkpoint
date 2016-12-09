@@ -6,7 +6,10 @@ use Exception;
 use Respect\Validation\Validator;
 
 /**
+ * The inspector is a rule/error message organizer that wraps around Respect/Validation
  *
+ * @author Matthew J. Sahagian [mjs] matthew.sahagian@gmail.com
+ * @copyright Imarc LLC 2016
  */
 abstract class Inspector implements Validation
 {

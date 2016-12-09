@@ -1,0 +1,24 @@
+{
+	"name": "imarc/checkpoint",
+	"description": "A simple, explicit, yet powerful validation paradigm",
+	"keywords": ["validation"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Matthew J. Sahagian",
+			"email": "matt@imarc.com",
+			"role": "Lead Architect / Developer"
+		},
+		{
+			"name": "Brian Tam",
+			"email": "brian@imarc.net",
+			"role": "Junior Architect"
+		}
+	],
+	"require": {
+		"php": ">=5.6.0"
+	},
+	"autoload": {
+		"classmap": ["src/"]
+	}
+}

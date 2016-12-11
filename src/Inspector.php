@@ -182,7 +182,9 @@ abstract class Inspector implements Validation
 		if ($path) {
 			if (strpos($path, '.') === FALSE) {
 				if (!isset($this->messages[$path])) {
-					 return NULL;
+					return isset($this->children[$path])
+						? $this->children[$path]->getMessages()
+						: NULL;
 				}
 
 				return $this->messages[$path];

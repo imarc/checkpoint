@@ -21,11 +21,16 @@ abstract class Inspector implements Validation
 	 * @var array
 	 */
 	static protected $defaultErrors = [
-		'alpha'      => 'This field should contain only letters',
-		'email'      => 'This field should contain a valid e-mail address',
-		'phone'      => 'Please enter a valid phone number e.g. 212-555-1234',
-		'lowercase'  => 'This field should not contain capital letters',
-		'notBlank'   => 'This field cannot be left blank',
+		'alpha'       => 'This field should contain only letters',
+		'alnum'       => 'This field should only contain letters, numbers, and spaces',
+		'date'        => 'This field should contain a valid date',
+		'email'       => 'This field should contain a valid e-mail address',
+		'phone'       => 'This field should contain a valid phone number e.g. 212-555-1234',
+		'lowercase'   => 'This field should not contain capital letters',
+		'notBlank'    => 'This field cannot be left blank',
+		'countryCode' => 'This field must be a valid ISO country code',
+		'creditCard'  => 'This field must be a valid credit card number',
+		'url'         => 'This field should contain a valid URL',
 	];
 
 

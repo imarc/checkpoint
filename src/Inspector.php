@@ -228,13 +228,18 @@ abstract class Inspector implements Validation
 	 *
 	 * @access public
 	 * @param mixed $data The data to validate
+	 * @param bool $exception_on_messages Throw an exception if there are error messages
 	 * @return Inspector The object instance for method chaining
 	 */
-	public function run($data)
+	public function run($data, $exception_on_messages = FALSE)
 	{
 		$this->clear();
 
 		$this->validate($data);
+
+		if ($exception_on_messages && $this->countMessages()) {
+			throw new ValidationException('Please correct the errors shown below.');
+		}
 
 		return $this;
 	}

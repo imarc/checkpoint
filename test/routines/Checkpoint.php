@@ -146,11 +146,12 @@ return [
 			accept('Checkpoint\Inspector::run')
 				-> using($shared->checksInspector)
 				-> with($shared->goodData = [
-					'notBlank'  => 'Non-blank value',
-					'alpha'     => 'AlphaValue',
-					'email'     => 'user@example.com',
-					'lowercase' => 'lowercase',
-					'phone'     => '212-555-3822'
+					'notBlank'   => 'Non-blank value',
+					'alpha'      => 'AlphaValue',
+					'email'      => 'user@example.com',
+					'lowercase'  => 'lowercase',
+					'phone'      => '212-555-3822',
+					'creditCard' => '4024007153361885',
 				])
 				-> equals($shared->checksInspector)
 			;
@@ -163,11 +164,12 @@ return [
 			accept('Checkpoint\Inspector::run')
 				-> using($shared->checksInspector)
 				-> with($shared->badData = [
-					'notBlank'  => '',
-					'alpha'     => 'Alpha Value 1',
-					'email'     => 'user_example.com',
-					'lowercase' => 'LowerCase',
-					'phone'     => '3822'
+					'notBlank'   => '',
+					'alpha'      => 'Alpha Value 1',
+					'email'      => 'user_example.com',
+					'lowercase'  => 'LowerCase',
+					'phone'      => '3822',
+					'creditCard' => '402400715336',
 				])
 				-> equals($shared->checksInspector)
 			;

@@ -105,10 +105,15 @@ abstract class Inspector implements Validation
 	 * @param string $key The key to use when logging error messages
 	 * @param mixed $data The data to validate against the rules
 	 * @param array $rules The array of rules to check the data against
+	 * @param bool $is_optional Allow all checks to fail if no data is present
 	 * @return Inspector The object instance for method chaining
 	 */
-	public function check($key, $data, array $rules)
+	public function check($key, $data, array $rules, $is_optional = FALSE)
 	{
+		if ($is_optional && !$data) {
+			return $this;
+		}
+
 		foreach ($rules as $rule) {
 			if (!isset($this->errors[$rule])) {
 				throw new Exception(sprintf(

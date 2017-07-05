@@ -23,6 +23,7 @@ abstract class Inspector implements Validation
 	static protected $defaultErrors = [
 		'alpha'       => 'This field should contain only letters',
 		'alnum'       => 'This field should only contain letters, numbers, and spaces',
+		'numeric'     => 'This field should only contain numeric values',
 		'date'        => 'This field should contain a valid date',
 		'email'       => 'This field should contain a valid e-mail address',
 		'phone'       => 'This field should contain a valid phone number e.g. 212-555-1234',
@@ -30,7 +31,7 @@ abstract class Inspector implements Validation
 		'notBlank'    => 'This field cannot be left blank',
 		'countryCode' => 'This field must be a valid ISO country code',
 		'creditCard'  => 'This field must be a valid credit card number',
-		'url'         => 'This field should contain a valid URL',
+		'url'         => 'This field should contain a valid URL, including http:// or https://',
 	];
 
 

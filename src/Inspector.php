@@ -244,7 +244,11 @@ abstract class Inspector implements Validation
 		$this->validate($data);
 
 		if ($exception_on_messages && $this->countMessages()) {
-			throw new ValidationException('Please correct the errors shown below.');
+			$exception = new ValidationException('Please correct the errors shown below.');
+
+			$exception->setInspector($this);
+
+			throw $exception;
 		}
 
 		return $this;

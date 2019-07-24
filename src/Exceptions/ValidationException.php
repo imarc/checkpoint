@@ -12,5 +12,28 @@ use Exception;
  */
 class ValidationException extends Exception
 {
+	/**
+	 *
+	 */
+	protected $inspector = NULL;
 
+
+	/**
+	 *
+	 */
+	public function setInspector(Inspector $inspector)
+	{
+		$this->inspector = $inspector;
+
+		return $this;
+	}
+
+
+	/**
+	 *
+	 */
+	public function getMessages($path = NULL)
+	{
+		return $this->inspector->getMessages($path);
+	}
 }

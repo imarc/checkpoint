@@ -60,7 +60,7 @@ abstract class Inspector implements Validation
 	 * The internal validator
 	 *
 	 * @access protected
-	 * @var Respect\Validation\Validator
+	 * @var Validator
 	 */
 	protected $validator = NULL;
 

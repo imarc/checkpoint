@@ -111,8 +111,10 @@ abstract class Inspector implements Validation
 	 */
 	public function check($key, $data, array $rules, $is_optional = FALSE)
 	{
+		$pass = TRUE;
+
 		if ($is_optional && !$data) {
-			return $this;
+			return $pass;
 		}
 
 		foreach ($rules as $rule) {
@@ -130,11 +132,13 @@ abstract class Inspector implements Validation
 			}
 
 			if (!$check->validate($data)) {
+				$pass = FALSE;
+
 				$this->log($key, $this->errors[$rule]);
 			}
 		}
 
-		return $this;
+		return $pass;
 	}
 
 
@@ -191,14 +195,14 @@ abstract class Inspector implements Validation
 	public function getMessages($path = NULL)
 	{
 		if ($path) {
-			if (strpos($path, '.') === FALSE) {
-				if (!isset($this->messages[$path])) {
-					return isset($this->children[$path])
-						? $this->children[$path]->getMessages()
-						: NULL;
-				}
-
+			if (isset($this->messages[$path])) {
 				return $this->messages[$path];
+			}
+
+			if (strpos($path, '.') === FALSE) {
+				return isset($this->children[$path])
+					? $this->children[$path]->getMessages()
+					: NULL;
 			}
 
 			$child = $this;

@@ -36,12 +36,12 @@ abstract class Inspector implements Validation
 
 
 	/**
-	 * Custom rules keyed by the rule name
+	 * List of child inspectors
 	 *
-	 * @access protected
+	 * @access private
 	 * @var array
 	 */
-	protected $rules = array();
+	protected $children = array();
 
 
 	/**
@@ -54,6 +54,15 @@ abstract class Inspector implements Validation
 	 * @var array
 	 */
 	protected $errors = array();
+
+
+	/**
+	 * Custom rules keyed by the rule name
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $rules = array();
 
 
 	/**
@@ -72,15 +81,6 @@ abstract class Inspector implements Validation
 	 * @var array
 	 */
 	private $messages = array();
-
-
-	/**
-	 * List of child inspectors
-	 *
-	 * @access private
-	 * @var array
-	 */
-	private $children = array();
 
 
 	/**
@@ -113,7 +113,9 @@ abstract class Inspector implements Validation
 	{
 		$pass = TRUE;
 
-		if ($is_optional && !$data) {
+		if (!$is_optional) {
+			$rules = array_unique(array_merge(['notBlank'], $rules));
+		} elseif (!$data) {
 			return $pass;
 		}
 
@@ -135,6 +137,10 @@ abstract class Inspector implements Validation
 				$pass = FALSE;
 
 				$this->log($key, $this->errors[$rule]);
+
+				if ($rule == 'notBlank') {
+					break;
+				}
 			}
 		}
 

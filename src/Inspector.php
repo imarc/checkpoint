@@ -23,6 +23,7 @@ abstract class Inspector implements Validation
 	static protected $defaultErrors = [
 		'alpha'       => 'This field should contain only letters',
 		'alnum'       => 'This field should only contain letters, numbers, and spaces',
+		'boolVal'     => 'This field should only contain true/false values',
 		'numeric'     => 'This field should only contain numeric values',
 		'date'        => 'This field should contain a valid date',
 		'email'       => 'This field should contain a valid e-mail address',

@@ -9,7 +9,6 @@ use Respect\Validation\Validator;
  * The inspector is a rule/error message organizer that wraps around Respect/Validation
  *
  * @author Matthew J. Sahagian [mjs] matthew.sahagian@gmail.com
- * @copyright Imarc LLC 2016
  */
 abstract class Inspector implements Validation
 {
@@ -251,7 +250,7 @@ abstract class Inspector implements Validation
 	public function run($data, $exception_on_messages = FALSE)
 	{
 		$this->clear();
-
+		$this->setup($data);
 		$this->validate($data);
 
 		if ($exception_on_messages && $this->countMessages()) {
@@ -263,6 +262,18 @@ abstract class Inspector implements Validation
 		}
 
 		return $this;
+	}
+
+
+	/**
+	 * Set up validation checks and default error messages for the data
+	 * @access public
+	 * @param mixed $data The data to validate
+	 * @return void
+	 */
+	protected function setup($data)
+	{
+
 	}
 
 

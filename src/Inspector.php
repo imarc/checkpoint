@@ -211,25 +211,22 @@ abstract class Inspector implements Validation
 					: NULL;
 			}
 
-			$child = $this;
 			$parts = explode('.', $path);
-			$key   = array_pop($parts);
+			$head  = array_shift($parts);
 
-			foreach ($parts as $part) {
-				if (!isset($child->children[$part])) {
-					return NULL;
-				}
-
-				$child = $child->children[$part];
-			}
-
-			return $child->getMessages($key);
-		 }
+			return isset($this->children[$head])
+				? $this->children[$head]->getMessages(implode('.', $parts))
+				: NULL;
+		}
 
 		$messages = $this->messages;
 
 		foreach ($this->children as $reference => $inspector) {
 			$messages[$reference] = $inspector->getMessages();
+
+			if (empty($messages[$reference])) {
+				unset($messages[$reference]);
+			}
 		}
 
 		return $messages;
@@ -273,7 +270,6 @@ abstract class Inspector implements Validation
 	 */
 	protected function setup($data)
 	{
-
 	}
 
 
@@ -358,6 +354,6 @@ abstract class Inspector implements Validation
 	 */
 	protected function validate($data)
 	{
-		 return;
+		return;
 	}
 }

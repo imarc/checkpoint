@@ -29,6 +29,7 @@ abstract class Inspector implements Validation
 		'phone'       => 'This field should contain a valid phone number e.g. 212-555-1234',
 		'lowercase'   => 'This field should not contain capital letters',
 		'notBlank'    => 'This field cannot be left blank',
+		'notOptional' => 'This field is required',
 		'countryCode' => 'This field must be a valid ISO country code',
 		'creditCard'  => 'This field must be a valid credit card number',
 		'url'         => 'This field should contain a valid URL, including http:// or https://',
@@ -114,7 +115,7 @@ abstract class Inspector implements Validation
 		$pass = TRUE;
 
 		if (!$is_optional) {
-			$rules = array_unique(array_merge(['notBlank'], $rules));
+			$rules = array_unique(array_merge(['notOptional'], $rules));
 		} elseif (!$data) {
 			return $pass;
 		}
@@ -138,7 +139,7 @@ abstract class Inspector implements Validation
 
 				$this->log($key, $this->errors[$rule]);
 
-				if ($rule == 'notBlank') {
+				if ($rule == 'notOptional') {
 					break;
 				}
 			}

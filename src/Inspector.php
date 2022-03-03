@@ -110,13 +110,13 @@ abstract class Inspector implements Validation
 	 * @param bool $is_optional Allow all checks to fail if no data is present
 	 * @return Inspector The object instance for method chaining
 	 */
-	public function check($key, $data, array $rules, $is_optional = FALSE)
+	public function check($key, $data, array $rules, $is_optional = FALSE, $check_on_empty = FALSE)
 	{
 		$pass = TRUE;
 
 		if (!$is_optional) {
 			$rules = array_unique(array_merge(['notOptional'], $rules));
-		} elseif (!$data) {
+		} elseif (!$data && !$check_on_empty) {
 			return $pass;
 		}
 

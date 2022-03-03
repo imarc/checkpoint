@@ -39,7 +39,7 @@ abstract class FormInspector extends Inspector
 	/**
 	 *
 	 */
-	public function setCheckedFields(array $checks)
+	public function setRequiredChecks(array $checks)
 	{
 		$this->requiredChecks = array_replace_recursive($this->requiredChecks, $checks);
 	}
@@ -81,7 +81,7 @@ abstract class FormInspector extends Inspector
 			}
 
 			if (isset($this->requiredChecks[$field])) {
-				$child->setCheckedFields($this->requiredChecks[$field]);
+				$child->setRequiredChecks($this->requiredChecks[$field]);
 			}
 
 			$child->run($data[$field] ?? array());

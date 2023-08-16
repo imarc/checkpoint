@@ -13,15 +13,18 @@ use Exception;
 class ValidationException extends Exception
 {
 	/**
-	 *
+	 * @access protected
+	 * @var Inspector|null
 	 */
 	protected $inspector = NULL;
 
 
 	/**
-	 *
+	 * @access public
+	 * @param Inspector $inspector
+	 * @return self
 	 */
-	public function setInspector(Inspector $inspector)
+	public function setInspector(Inspector $inspector): self
 	{
 		$this->inspector = $inspector;
 
@@ -30,9 +33,11 @@ class ValidationException extends Exception
 
 
 	/**
-	 *
+	 * @access public
+	 * @param string $path
+	 * @return array<string, mixed>|array<string> The list of validation messages based on violated rules
 	 */
-	public function getMessages($path = NULL)
+	public function getMessages(string $path = NULL): array
 	{
 		return $this->inspector->getMessages($path);
 	}

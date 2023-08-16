@@ -3,56 +3,73 @@
 namespace Checkpoint;
 
 /**
- * The inspector is a rule/error message organizer that wraps around Respect/Validation
+ * Form inspectors are dynamically configurable inspectors that assume HTML form input as an array
  *
  * @author Matthew J. Sahagian [mjs] matthew.sahagian@gmail.com
  */
 abstract class FormInspector extends Inspector
 {
 	/**
+	 * A list of checks keyed by field
 	 *
+	 * @access protected
+	 * @var array<string, mixed>
 	 */
 	protected $checks = array();
 
 
 	/**
+	 * List of child inspectors
 	 *
+	 * @access protected
+	 * @var array<string, self>
 	 */
-	protected $required = array();
+	protected $children = array();
 
 
 	/**
+	 * A list of requirements keyed by field
 	 *
+	 * @access protected
+	 * @var array<string, mixed>
 	 */
-	protected $requiredChecks = array();
+	protected $requirements = array();
 
 
 	/**
-	 *
+	 * @access public
+	 * @param array<string, mixed> $checks
+	 * @return self
 	 */
-	public function setRequiredFields(array $required)
+	public function setChecks(array $checks): self
 	{
-		$this->required = array_replace_recursive($this->required, $required);
+		$this->checks = array_replace_recursive($this->checks, $checks);
+
+		return $this;
 	}
 
 
 	/**
-	 *
+	 * @access public
+	 * @param array<string, mixed> $requirements
+	 * @return self
 	 */
-	public function setRequiredChecks(array $checks)
+	public function setRequirements(array $requirements): self
 	{
-		$this->requiredChecks = array_replace_recursive($this->requiredChecks, $checks);
+		$this->requirements = array_replace_recursive($this->requirements, $requirements);
+
+		return $this;
 	}
 
 
 	/**
-	 *
+	 * @{inheritDoc}
 	 */
 	protected function validate($data)
 	{
 		$fields = array_unique(array_diff(array_merge(
 			array_keys($this->checks),
-			array_keys($this->required)
+			array_keys($this->requirements)
 		),  array_keys($this->children)));
 
 		foreach ($fields as $field) {
@@ -64,24 +81,20 @@ abstract class FormInspector extends Inspector
 				$checks = array();
 			}
 
-			if (empty($this->required[$field])) {
-				if (isset($this->requiredChecks[$field])) {
-					$this->check($field, $value, $this->requiredChecks[$field], TRUE, TRUE);
-				} else {
-					$this->check($field, $value, $checks, TRUE);
-				}
+			if (empty($this->requirements[$field])) {
+				$this->check($field, $value, $checks, TRUE);
 			} else {
 				$this->check($field, $value, $checks);
 			}
 		}
 
 		foreach ($this->children as $field => $child) {
-			if (isset($this->required[$field])) {
-				$child->setRequiredFields($this->required[$field]);
+			if (isset($this->requirements[$field])) {
+				$child->setRequirements($this->requirements[$field]);
 			}
 
-			if (isset($this->requiredChecks[$field])) {
-				$child->setRequiredChecks($this->requiredChecks[$field]);
+			if (isset($this->checks[$field])) {
+				$child->setChecks($this->checks[$field]);
 			}
 
 			$child->run($data[$field] ?? array());

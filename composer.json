@@ -10,18 +10,18 @@
 			"role": "Lead Architect / Developer"
 		},
 		{
-			"name": "Brian Tam",
-			"email": "brian@imarc.net",
-			"role": "Junior Architect"
+			"name": "Avery Tam",
+			"email": "avery@imarc.com",
+			"role": "Developer"
 		}
 	],
 	"require-dev": {
-		"dotink/lab": "^1.2.0"
+		"phpstan/phpstan": "^1.10",
+		"phpunit/phpunit": "^8.5"
 	},
 	"require": {
-		"php": ">=5.6.0",
-		"respect/validation": "^1.1.0"
-
+		"php": ">=7.2",
+		"respect/validation": "^2.0.0"
 	},
 	"autoload": {
 		"classmap": ["src/"]

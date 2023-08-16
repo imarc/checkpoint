@@ -319,3 +319,17 @@ Checkpoint was written to solve much of the inflexibility found in other validat
 By encapsulating validation logic and using actual logic with a few clean helper methods, it's possible to do much more complex validation while still keeping all the rules for a particular domain model in one place as opposed to having simpler checks written in a config, and then more complex checks written in separately registered helpers or as separate rule objects.
 
 Repsect/Validation provides a lot of possible rules out of the box, so simple validation remains easy.  To learn more about Respect/Validation, see [their github repository](https://github.com/respect/validation).
+
+#### Code Check and Testing
+
+Run Analysis:
+
+```
+php vendor/bin/phpstan -l7 analyse src/
+```
+
+Run Tests:
+
+```
+php vendor/bin/phpunit --bootstrap vendor/autoload.php test/cases
+```

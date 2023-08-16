@@ -2,7 +2,7 @@
 
 namespace Checkpoint;
 
-use Exception;
+use RuntimeException;
 use Respect\Validation\Validator;
 
 /**
@@ -17,7 +17,7 @@ abstract class Inspector implements Validation
 	 *
 	 * @static
 	 * @access protected
-	 * @var array
+	 * @var array<string, string>
 	 */
 	static protected $defaultErrors = [
 		'alpha'       => 'This field should contain only letters',
@@ -30,6 +30,7 @@ abstract class Inspector implements Validation
 		'lowercase'   => 'This field should not contain capital letters',
 		'notBlank'    => 'This field cannot be left blank',
 		'notOptional' => 'This field is required',
+		'trueVal'     => 'This field must contain a true value',
 		'countryCode' => 'This field must be a valid ISO country code',
 		'creditCard'  => 'This field must be a valid credit card number',
 		'url'         => 'This field should contain a valid URL, including http:// or https://',
@@ -40,7 +41,7 @@ abstract class Inspector implements Validation
 	 * List of child inspectors
 	 *
 	 * @access private
-	 * @var array
+	 * @var array<string, self>
 	 */
 	protected $children = array();
 
@@ -48,11 +49,11 @@ abstract class Inspector implements Validation
 	/**
 	 * List of error messages keyed by rule name
 	 *
-	 * These will reflect `$defaultErrors` when the inspector is cleared and will have new ones added as they are
-	 * defined.
+	 * These will reflect `$defaultErrors` when the inspector is cleared and will have new ones
+	 * added as they are defined.
 	 *
 	 * @access protected
-	 * @var array
+	 * @var array<string, string>
 	 */
 	protected $errors = array();
 
@@ -61,7 +62,7 @@ abstract class Inspector implements Validation
 	 * Custom rules keyed by the rule name
 	 *
 	 * @access protected
-	 * @var array
+	 * @var array<string, Validator>
 	 */
 	protected $rules = array();
 
@@ -70,7 +71,7 @@ abstract class Inspector implements Validation
 	 * The internal validator
 	 *
 	 * @access protected
-	 * @var Validator
+	 * @var Validator|null
 	 */
 	protected $validator = NULL;
 
@@ -79,7 +80,7 @@ abstract class Inspector implements Validation
 	 * List of logged messages
 	 *
 	 * @access private
-	 * @var array
+	 * @var array<string, array<string>>
 	 */
 	private $messages = array();
 
@@ -92,7 +93,7 @@ abstract class Inspector implements Validation
 	 * @param Inspector $child The child instance
 	 * @return Inspector The object instance for method chaining
 	 */
-	public function add($reference, Inspector $child)
+	public function add(string $reference, Inspector $child)
 	{
 		$this->children[$reference] = $child;
 
@@ -106,23 +107,21 @@ abstract class Inspector implements Validation
 	 * @access public
 	 * @param string $key The key to use when logging error messages
 	 * @param mixed $data The data to validate against the rules
-	 * @param array $rules The array of rules to check the data against
+	 * @param array<string> $rules The array of rules to check the data against
 	 * @param bool $is_optional Allow all checks to fail if no data is present
-	 * @return Inspector The object instance for method chaining
+	 * @return bool Whether or not the check passed or failed
 	 */
-	public function check($key, $data, array $rules, $is_optional = FALSE, $check_on_empty = FALSE)
+	public function check(string $key, $data, array $rules, bool $is_optional = FALSE): bool
 	{
 		$pass = TRUE;
 
 		if (!$is_optional) {
 			$rules = array_unique(array_merge(['notOptional'], $rules));
-		} elseif (!$data && !$check_on_empty) {
-			return $pass;
 		}
 
 		foreach ($rules as $rule) {
 			if (!isset($this->errors[$rule])) {
-				throw new Exception(sprintf(
+				throw new RuntimeException(sprintf(
 					'Unsupported validation rule "%s", try using define()',
 					$rule
 				));
@@ -197,9 +196,9 @@ abstract class Inspector implements Validation
 	 *
 	 * @access public
 	 * @param string $path The path to the validation messages
-	 * @return array The list of validation messages based on violated rules
+	 * @return array<string, mixed>|array<string> The list of validation messages based on violated rules
 	 */
-	public function getMessages($path = NULL)
+	public function getMessages($path = NULL): array
 	{
 		if ($path) {
 			if (isset($this->messages[$path])) {
@@ -243,9 +242,9 @@ abstract class Inspector implements Validation
 	 * @access public
 	 * @param mixed $data The data to validate
 	 * @param bool $exception_on_messages Throw an exception if there are error messages
-	 * @return Inspector The object instance for method chaining
+	 * @return self The object instance for method chaining
 	 */
-	public function run($data, $exception_on_messages = FALSE)
+	public function run($data, $exception_on_messages = FALSE): self
 	{
 		$this->clear();
 		$this->setup($data);
@@ -279,9 +278,9 @@ abstract class Inspector implements Validation
 	 *
 	 * @access public
 	 * @param Validator $validator The internal validator instance
-	 * @return Inspector The object instance for method chaining
+	 * @return self The object instance for method chaining
 	 */
-	public function setValidator(Validator $validator)
+	public function setValidator(Validator $validator): self
 	{
 		$this->validator = $validator;
 
@@ -293,9 +292,9 @@ abstract class Inspector implements Validation
 	 * Clear the messages, rules, and errors for this inspector (reset it back to defaults)
 	 *
 	 * @access protected
-	 * @return Inspector The object instance for method chaining
+	 * @return self The object instance for method chaining
 	 */
-	protected function clear()
+	protected function clear(): self
 	{
 		$this->messages = array();
 		$this->rules    = array();
@@ -313,12 +312,12 @@ abstract class Inspector implements Validation
 	 *
 	 * @access protected
 	 * @param string $reference The reference under which the child inspector was added
-	 * @return Inspector The child inspector instance
+	 * @return self The child inspector instance
 	 */
-	protected function fetch($reference)
+	protected function fetch($reference): self
 	{
 		if (!isset($this->children[$reference])) {
-			throw new Exception(sprintf(
+			throw new RuntimeException(sprintf(
 				'Reference "%s" is not valid / has not been added.',
 				$reference
 			));
@@ -334,9 +333,9 @@ abstract class Inspector implements Validation
 	 * @access protected
 	 * @param string $key The key under which to log the message.
 	 * @param string $message The message to log
-	 * @return Inspector The object instance for method chaining
+	 * @return self The object instance for method chaining
 	 */
-	protected function log($key, $message)
+	protected function log($key, $message): self
 	{
 		$this->messages[$key][] = $message;
 

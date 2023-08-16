@@ -278,9 +278,9 @@ abstract class Inspector implements Validation
 	 *
 	 * @access public
 	 * @param Validator $validator The internal validator instance
-	 * @return self The object instance for method chaining
+	 * @return Validation The object instance for method chaining
 	 */
-	public function setValidator(Validator $validator): self
+	public function setValidator(Validator $validator): Validation
 	{
 		$this->validator = $validator;
 

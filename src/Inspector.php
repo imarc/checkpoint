@@ -119,6 +119,10 @@ abstract class Inspector implements Validation
 			$rules = array_unique(array_merge(['notOptional'], $rules));
 		}
 
+		if (!in_array('notOptional', $rules) && !$data) {
+			return $pass;
+		}
+
 		foreach ($rules as $rule) {
 			if (!isset($this->errors[$rule])) {
 				throw new RuntimeException(sprintf(
@@ -208,7 +212,7 @@ abstract class Inspector implements Validation
 			if (strpos($path, '.') === FALSE) {
 				return isset($this->children[$path])
 					? $this->children[$path]->getMessages()
-					: NULL;
+					: array();
 			}
 
 			$parts = explode('.', $path);
@@ -216,7 +220,7 @@ abstract class Inspector implements Validation
 
 			return isset($this->children[$head])
 				? $this->children[$head]->getMessages(implode('.', $parts))
-				: NULL;
+				: array();
 		}
 
 		$messages = $this->messages;

@@ -90,6 +90,10 @@ abstract class FormInspector extends Inspector
 
 		foreach ($this->children as $field => $child) {
 			if (isset($this->requirements[$field])) {
+				if ($this->requirements[$field] === FALSE) {
+					continue;
+				}
+
 				$child->setRequirements($this->requirements[$field]);
 			}
 
